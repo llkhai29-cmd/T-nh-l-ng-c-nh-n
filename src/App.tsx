@@ -152,9 +152,16 @@ export default function App() {
     validationErrors.push("Không cho phép nhập giá trị số âm.");
   }
 
-  // Calculate formulas
-  const totalSalary = (standardDaysNum > 0 && actualDaysNum >= 0) 
-    ? (basicSalaryNum / standardDaysNum) * actualDaysNum 
+  // Calculate formulas with custom conditions for standard workdays of 30 or 31 days
+  let divisor = standardDaysNum;
+  if (standardDaysNum === 31) {
+    divisor = 29;
+  } else if (standardDaysNum === 30) {
+    divisor = 28;
+  }
+
+  const totalSalary = (divisor > 0 && actualDaysNum >= 0) 
+    ? (basicSalaryNum / divisor) * actualDaysNum 
     : 0;
 
   const netSalary = totalSalary + allowanceNum + attendanceNum + revenueNum - advanceNum;
@@ -551,10 +558,15 @@ export default function App() {
                         PHƯƠNG THỨC TÍNH TOÁN
                       </div>
                       <div className="space-y-1.5">
-                        <p>1. Tổng lương ngày công = (Lương cơ bản / Ngày công chuẩn) × Ngày công thực tế</p>
+                        <p>1. Tổng lương ngày công:</p>
+                        <ul className="list-disc pl-4 space-y-0.5 text-blue-900/60 font-medium">
+                          <li>Nếu ngày công chuẩn = 31: <span className="font-semibold text-blue-950">(Lương cơ bản / 29) × Ngày công thực tế</span></li>
+                          <li>Nếu ngày công chuẩn = 30: <span className="font-semibold text-blue-950">(Lương cơ bản / 28) × Ngày công thực tế</span></li>
+                          <li>Trường hợp khác: <span className="font-semibold text-blue-950">(Lương cơ bản / Ngày công chuẩn) × Ngày công thực tế</span></li>
+                        </ul>
                         <p>2. Lương thực lãnh = Tổng lương ngày công + Phụ cấp + Chuyên cần + Doanh thu − Tiền tạm ứng</p>
                         <div className="border-t border-blue-200/40 pt-1.5 font-mono text-blue-800 text-[11px]">
-                          ({new Intl.NumberFormat('vi-VN').format(basicSalaryNum)} / {standardDaysNum}) × {actualDaysNum} = {formatVND(totalSalary)}
+                          ({new Intl.NumberFormat('vi-VN').format(basicSalaryNum)} / {divisor}) × {actualDaysNum} = {formatVND(totalSalary)}
                         </div>
                       </div>
                     </motion.div>
