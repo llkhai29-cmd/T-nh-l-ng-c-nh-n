@@ -99,7 +99,7 @@ const formatVND = (value: number) => {
 export default function App() {
   // Input states as strings for direct input formatting and easy clearing
   const [basicSalary, setBasicSalary] = useState<string>("0");
-  const [standardDays, setStandardDays] = useState<string>("26");
+  const [standardDays, setStandardDays] = useState<string>("0");
   const [actualDays, setActualDays] = useState<string>("0");
   const [allowance, setAllowance] = useState<string>("0");
   const [revenue, setRevenue] = useState<string>("0");
@@ -188,7 +188,7 @@ export default function App() {
   // Reset function back to clear state
   const handleReset = () => {
     setBasicSalary("0");
-    setStandardDays("26");
+    setStandardDays("0");
     setActualDays("0");
     setAllowance("0");
     setRevenue("0");
