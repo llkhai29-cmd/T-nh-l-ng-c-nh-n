@@ -98,12 +98,12 @@ const formatVND = (value: number) => {
 
 export default function App() {
   // Input states as strings for direct input formatting and easy clearing
-  const [basicSalary, setBasicSalary] = useState<string>("20.000.000");
+  const [basicSalary, setBasicSalary] = useState<string>("0");
   const [standardDays, setStandardDays] = useState<string>("26");
-  const [actualDays, setActualDays] = useState<string>("24");
-  const [allowance, setAllowance] = useState<string>("1.500.000");
-  const [revenue, setRevenue] = useState<string>("5.000.000");
-  const [advance, setAdvance] = useState<string>("2.000.000");
+  const [actualDays, setActualDays] = useState<string>("0");
+  const [allowance, setAllowance] = useState<string>("0");
+  const [revenue, setRevenue] = useState<string>("0");
+  const [advance, setAdvance] = useState<string>("0");
 
   // Visual pulse trigger on calculate click
   const [pulseTrigger, setPulseTrigger] = useState<boolean>(false);
