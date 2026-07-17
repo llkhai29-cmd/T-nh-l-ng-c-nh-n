@@ -1,0 +1,6 @@
+{
+  "name": "Tính Lương Cá Nhân",
+  "description": "Ứng dụng tính lương cá nhân hàng tháng đơn giản, trực quan và chính xác.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
