@@ -103,6 +103,7 @@ export default function App() {
   const [actualDays, setActualDays] = useState<string>("0");
   const [allowance, setAllowance] = useState<string>("0");
   const [attendance, setAttendance] = useState<string>("0");
+  const [responsibility, setResponsibility] = useState<string>("0");
   const [revenue, setRevenue] = useState<string>("0");
   const [advance, setAdvance] = useState<string>("0");
 
@@ -126,6 +127,7 @@ export default function App() {
   const actualDaysNum = parseDays(actualDays);
   const allowanceNum = parseCurrency(allowance);
   const attendanceNum = parseCurrency(attendance);
+  const responsibilityNum = parseCurrency(responsibility);
   const revenueNum = parseCurrency(revenue);
   const advanceNum = parseCurrency(advance);
 
@@ -138,6 +140,7 @@ export default function App() {
   if (!actualDays) validationErrors.push("Ngày công thực tế không được để trống.");
   if (!allowance) validationErrors.push("Phụ cấp không được để trống. Hãy nhập 0 nếu không có.");
   if (!attendance) validationErrors.push("Chuyên cần không được để trống. Hãy nhập 0 nếu không có.");
+  if (!responsibility) validationErrors.push("Trách nhiệm không được để trống. Hãy nhập 0 nếu không có.");
   if (!revenue) validationErrors.push("Doanh thu không được để trống. Hãy nhập 0 nếu không có.");
   if (!advance) validationErrors.push("Tiền ứng không được để trống. Hãy nhập 0 nếu không có.");
 
@@ -148,7 +151,7 @@ export default function App() {
   if (actualDaysNum > standardDaysNum) {
     validationErrors.push("Ngày công thực tế không được lớn hơn ngày công chuẩn.");
   }
-  if (basicSalaryNum < 0 || allowanceNum < 0 || attendanceNum < 0 || revenueNum < 0 || advanceNum < 0 || actualDaysNum < 0 || standardDaysNum < 0) {
+  if (basicSalaryNum < 0 || allowanceNum < 0 || attendanceNum < 0 || responsibilityNum < 0 || revenueNum < 0 || advanceNum < 0 || actualDaysNum < 0 || standardDaysNum < 0) {
     validationErrors.push("Không cho phép nhập giá trị số âm.");
   }
 
@@ -164,7 +167,7 @@ export default function App() {
     ? (basicSalaryNum / divisor) * actualDaysNum 
     : 0;
 
-  const netSalary = totalSalary + allowanceNum + attendanceNum + revenueNum - advanceNum;
+  const netSalary = totalSalary + allowanceNum + attendanceNum + responsibilityNum + revenueNum - advanceNum;
 
   // Handle inputs change safely with thousand separators in real-time
   const handleCurrencyInput = (valStr: string, setter: (val: string) => void) => {
@@ -202,6 +205,7 @@ export default function App() {
     setActualDays("0");
     setAllowance("0");
     setAttendance("0");
+    setResponsibility("0");
     setRevenue("0");
     setAdvance("0");
     setPulseTrigger(false);
@@ -351,6 +355,25 @@ export default function App() {
                   </div>
                 </div>
 
+                {/* Trách nhiệm */}
+                <div className="space-y-2">
+                  <label htmlFor="responsibility" className="text-xs md:text-sm font-bold text-blue-900 uppercase tracking-wider ml-1">
+                    Trách nhiệm
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg select-none">🎖️</span>
+                    <input
+                      id="responsibility"
+                      type="text"
+                      inputMode="numeric"
+                      value={responsibility}
+                      onChange={(e) => handleCurrencyInput(e.target.value, setResponsibility)}
+                      className="w-full bg-white/50 border border-blue-100 rounded-2xl py-3.5 pl-11 pr-4 text-lg font-semibold text-blue-900 focus:outline-hidden focus:ring-2 focus:ring-blue-400 focus:bg-white/85 transition-all shadow-xs"
+                      placeholder="Phụ cấp trách nhiệm..."
+                    />
+                  </div>
+                </div>
+
                 {/* Doanh thu */}
                 <div className="space-y-2">
                   <label htmlFor="revenue" className="text-xs md:text-sm font-bold text-blue-900 uppercase tracking-wider ml-1">
@@ -490,6 +513,11 @@ export default function App() {
                       </div>
 
                       <div className="flex items-center justify-between border-b border-blue-800/70 pb-3">
+                        <span className="text-blue-200/90 text-sm">Trách nhiệm</span>
+                        <span className="font-mono font-semibold text-emerald-300">+{formatVND(responsibilityNum)}</span>
+                      </div>
+
+                      <div className="flex items-center justify-between border-b border-blue-800/70 pb-3">
                         <span className="text-blue-200/90 text-sm">Doanh thu / Thưởng</span>
                         <span className="font-mono font-semibold text-emerald-300">+{formatVND(revenueNum)}</span>
                       </div>
@@ -564,7 +592,7 @@ export default function App() {
                           <li>Nếu ngày công chuẩn = 30: <span className="font-semibold text-blue-950">(Lương cơ bản / 28) × Ngày công thực tế</span></li>
                           <li>Trường hợp khác: <span className="font-semibold text-blue-950">(Lương cơ bản / Ngày công chuẩn) × Ngày công thực tế</span></li>
                         </ul>
-                        <p>2. Lương thực lãnh = Tổng lương ngày công + Phụ cấp + Chuyên cần + Doanh thu − Tiền tạm ứng</p>
+                        <p>2. Lương thực lãnh = Tổng lương ngày công + Phụ cấp + Chuyên cần + Trách nhiệm + Doanh thu − Tiền tạm ứng</p>
                         <div className="border-t border-blue-200/40 pt-1.5 font-mono text-blue-800 text-[11px]">
                           ({new Intl.NumberFormat('vi-VN').format(basicSalaryNum)} / {divisor}) × {actualDaysNum} = {formatVND(totalSalary)}
                         </div>
